@@ -1,7 +1,6 @@
 //https://howtodoinjava.com/java/io/java-read-file-to-string-examples/
 
 import java.io.IOException;
-import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -13,33 +12,36 @@ public class MarkdownParse {
         // find the next [, then find the ], then find the (, then read link upto next )
         int currentIndex = 0;
         while(currentIndex < markdown.length()) {
-            int exclamation = markdown.indexOf("!");
-
+            int exclamation = markdown.indexOf("!", currentIndex);
             int openBracket = markdown.indexOf("[", currentIndex);
-            if (exclamation < openBracket && exclamation != -1) {
+            if(exclamation < openBracket && exclamation != -1){
                 break;
             }
+                
             int closeBracket = markdown.indexOf("]", openBracket);
-            if (openBracket == closeBracket - 1) {
-                break;
-            }
             int openParen = markdown.indexOf("(", closeBracket);
-            if (openParen - closeBracket != 1) {
-                break;
-            }
             int closeParen = markdown.indexOf(")", openParen);
-            if (openBracket == -1 || closeBracket == -1 || openParen == -1 || closeParen == -1) {
+
+            if(openBracket == -1 || closeBracket == -1 || openParen == -1 || closeParen == -1){
+                currentIndex = markdown.length();
                 break;
             }
+
+            if (closeBracket + 1 != openParen ) {
+                break;
+            }
+
+            if (closeBracket - openBracket == 1) {
+                break;
+            }
+
+            else {
             toReturn.add(markdown.substring(openParen + 1, closeParen));
             currentIndex = closeParen + 1;
+            }
         }
-        if (toReturn.length() > 0) {
-            return toReturn;
-        }
-        else {
-            return null;
-        }
+        
+        return toReturn;
     }
 
 
