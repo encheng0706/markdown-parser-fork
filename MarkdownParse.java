@@ -30,11 +30,11 @@ public class MarkdownParse {
             if (closeBracket + 1 != openParen ) {
                 break;
             }
-
+/**
             if (closeBracket - openBracket == 1) {
                 break;
             }
-
+*/
             else {
             toReturn.add(markdown.substring(openParen + 1, closeParen));
             currentIndex = closeParen + 1;
